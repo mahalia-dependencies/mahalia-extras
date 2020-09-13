@@ -1,0 +1,11 @@
+[Unit]
+Description="Mahalia Setup"
+After=sound.target
+Before=hostapd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/mahalia-utils/mahalia-setup
+
+[Install]
+WantedBy=multi-user.target

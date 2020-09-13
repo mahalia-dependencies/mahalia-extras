@@ -1,0 +1,8 @@
+/etc/dnsmasq.d/dnsmasq.conf
+/etc/hostapd/hostapd.conf
+/etc/mahalia/cape4all.alsactl.state
+/etc/mahalia/config
+/etc/mahalia/mha-dynamiccompressor.cfg
+/etc/mahalia/mha-matrixmixer.cfg
+/etc/mahalia/mha-test.cfg
+/etc/sysctl.d/sysctl.conf

@@ -1,0 +1,270 @@
+#!/bin/sh
+set -e
+if [ "$1" = 'configure' ]; then
+	# create user
+	USERNAME="mha"
+	ENCRYPTED_PASSWORD=`mkpasswd -m sha-512 "mahalia"`
+	adduser --gecos $USERNAME --add_extra_groups --disabled-password $USERNAME
+	usermod -aG audio $USERNAME
+	usermod -aG sudo $USERNAME
+	usermod -p "${ENCRYPTED_PASSWORD}" $USERNAME
+
+	# unpack kernel modules
+	#tar -xvzf /usr/share/mahalia-utils/modules.tar.gz -C /
+	#rm /usr/share/mahalia-utils/modules.tar.gz
+
+	# configure motd & other system files
+	cp /usr/share/mahalia-utils/motd /etc/motd
+
+	# setup permissions
+	chown mha:mha /etc/mahalia
+	chown mha:mha /etc/mahalia/*
+
+	# setup dnsmasq & hostapd
+	echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" > /etc/default/hostapd
+
+	deb-systemd-invoke enable dnsmasq
+	#deb-systemd-invoke start dnsmasq
+
+	# hostapd is masked by default
+	systemctl unmask hostapd
+	deb-systemd-invoke enable hostapd
+	#deb-systemd-invoke start hostapd
+
+	# Install and start daemon
+	deb-systemd-invoke enable mahalia
+	deb-systemd-invoke enable mahalia-setup
+	deb-systemd-invoke enable mahalia-flasher
+	deb-systemd-invoke enable mahalia-batcat
+	deb-systemd-invoke enable mahalia-nodered
+
+        # The node-red package installs a "socket" that we need to disable
+        rm -f /etc/systemd/system/sockets.target.wants/nodered.socket
+
+# setup wifi hotspot
+echo "
+# wifi hotspot
+auto wlan0
+iface wlan0 inet static
+  address 10.0.0.1
+  netmask 255.255.255.0" >> /etc/network/interfaces
+
+# setup usb <-> ethernet bridge
+echo "g_ether" >> /etc/modules
+echo "
+# usb <-> ethernet bridge
+auto usb0
+iface usb0 inet static
+  address 192.168.7.2
+  netmask 255.255.255.0" >> /etc/network/interfaces
+
+
+	exit 0
+fi
+
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	# This will only remove masks created by d-s-h on package removal.
+	deb-systemd-helper unmask 'mahalia.service' >/dev/null || true
+
+	# was-enabled defaults to true, so new installations run enable.
+	if deb-systemd-helper --quiet was-enabled 'mahalia.service'; then
+		# Enables the unit on first installation, creates new
+		# symlinks on upgrades if the unit file has changed.
+		deb-systemd-helper enable 'mahalia.service' >/dev/null || true
+	else
+		# Update the statefile to add new symlinks (if any), which need to be
+		# cleaned up on purge. Also remove old symlinks.
+		deb-systemd-helper update-state 'mahalia.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	# This will only remove masks created by d-s-h on package removal.
+	deb-systemd-helper unmask 'mahalia-setup.service' >/dev/null || true
+
+	# was-enabled defaults to true, so new installations run enable.
+	if deb-systemd-helper --quiet was-enabled 'mahalia-setup.service'; then
+		# Enables the unit on first installation, creates new
+		# symlinks on upgrades if the unit file has changed.
+		deb-systemd-helper enable 'mahalia-setup.service' >/dev/null || true
+	else
+		# Update the statefile to add new symlinks (if any), which need to be
+		# cleaned up on purge. Also remove old symlinks.
+		deb-systemd-helper update-state 'mahalia-setup.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	# This will only remove masks created by d-s-h on package removal.
+	deb-systemd-helper unmask 'mahalia-flasher.service' >/dev/null || true
+
+	# was-enabled defaults to true, so new installations run enable.
+	if deb-systemd-helper --quiet was-enabled 'mahalia-flasher.service'; then
+		# Enables the unit on first installation, creates new
+		# symlinks on upgrades if the unit file has changed.
+		deb-systemd-helper enable 'mahalia-flasher.service' >/dev/null || true
+	else
+		# Update the statefile to add new symlinks (if any), which need to be
+		# cleaned up on purge. Also remove old symlinks.
+		deb-systemd-helper update-state 'mahalia-flasher.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	# This will only remove masks created by d-s-h on package removal.
+	deb-systemd-helper unmask 'mahalia-batcat.service' >/dev/null || true
+
+	# was-enabled defaults to true, so new installations run enable.
+	if deb-systemd-helper --quiet was-enabled 'mahalia-batcat.service'; then
+		# Enables the unit on first installation, creates new
+		# symlinks on upgrades if the unit file has changed.
+		deb-systemd-helper enable 'mahalia-batcat.service' >/dev/null || true
+	else
+		# Update the statefile to add new symlinks (if any), which need to be
+		# cleaned up on purge. Also remove old symlinks.
+		deb-systemd-helper update-state 'mahalia-batcat.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'mahalia.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'mahalia-setup.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'mahalia-flasher.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'mahalia-batcat.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'mahalia-batcat.service' 'mahalia-flasher.service' 'mahalia-setup.service' 'mahalia-wifidisable.service' 'mahalia.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installmodules/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -e /boot/System.map-4.14.94-rt50-02913-g8383e797681a-dirty ]; then
+		depmod -a -F /boot/System.map-4.14.94-rt50-02913-g8383e797681a-dirty 4.14.94-rt50-02913-g8383e797681a-dirty || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/mahalia" ]; then
+		update-rc.d mahalia defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d mahalia $_dh_action || exit 1
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/mahalia-setup" ]; then
+		update-rc.d mahalia-setup defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d mahalia-setup $_dh_action || exit 1
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/mahalia-flasher" ]; then
+		update-rc.d mahalia-flasher defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d mahalia-flasher $_dh_action || exit 1
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/mahalia-wifidisable" ]; then
+		update-rc.d mahalia-wifidisable defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d mahalia-wifidisable $_dh_action || exit 1
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/mahalia-batcat" ]; then
+		update-rc.d mahalia-batcat defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d mahalia-batcat $_dh_action || exit 1
+	fi
+fi
+# End automatically added section
+

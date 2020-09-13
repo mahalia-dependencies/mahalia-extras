@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+#
+# this script is run by root, on every boot
+#
+
+# initial configuration
+SCRIPT_PATH=$(readlink -f "$0")			# save path to this script
+BASE="/usr/share/mahalia-utils"			# the base folder for the project
+CONF="/etc/mahalia/config"			# the location of the configuration file
+SOUNDCARD_CONF="/etc/mahalia/cape4all.alsactl.state" # the location of the soundcard configuration file
+source $BASE/functions.sh			# include bash functions
+source $CONF					# include config file
+
+# status message
+echo "setting up soundcard"
+
+# read the serial number from eeprom & store for later
+hexdump -e '8/1 "%c"' /sys/bus/i2c/devices/0-0050/eeprom -s 12 -n 16 | tr -d '\n' > /tmp/bb_serial
+SERIAL_NUMBER=`cat /tmp/bb_serial`
+
+# set wifi ssid & replace serial number
+WIFI_SSID=`echo $WIFI_SSID | sed -e "s/\\\$SERIAL_NUMBER/$SERIAL_NUMBER/g"`
+sed -i "s/^ssid=.*$/ssid=$WIFI_SSID/" /etc/hostapd/hostapd.conf
+
+# set permissions of LED
+chmod 777 $MAHALIA_LED/trigger
+
+# turn LED off
+echo none > $MAHALIA_LED/trigger
+
+# set dma interrupt thread to FIFO priorty 95
+set_irq_priority_ff "edma_ccint" 95
+
+# restore soundcard settings
+alsactl restore -f $SOUNDCARD_CONF
+
+# status message
+echo "done setting up soundcard"

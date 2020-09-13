@@ -1,0 +1,52 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installinit/12ubuntu1
+if [ -x "/etc/init.d/mahalia-batcat" ] && [ "$1" = remove ]; then
+	invoke-rc.d mahalia-batcat stop || exit 1
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ -x "/etc/init.d/mahalia-wifidisable" ] && [ "$1" = remove ]; then
+	invoke-rc.d mahalia-wifidisable stop || exit 1
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ -x "/etc/init.d/mahalia-flasher" ] && [ "$1" = remove ]; then
+	invoke-rc.d mahalia-flasher stop || exit 1
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ -x "/etc/init.d/mahalia-setup" ] && [ "$1" = remove ]; then
+	invoke-rc.d mahalia-setup stop || exit 1
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ -x "/etc/init.d/mahalia" ] && [ "$1" = remove ]; then
+	invoke-rc.d mahalia stop || exit 1
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'mahalia-batcat.service' 'mahalia-flasher.service' 'mahalia-setup.service' 'mahalia-wifidisable.service' 'mahalia.service' >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'mahalia-batcat.service' >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'mahalia-flasher.service' >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'mahalia-setup.service' >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'mahalia.service' >/dev/null || true
+fi
+# End automatically added section

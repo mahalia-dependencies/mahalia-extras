@@ -1,0 +1,119 @@
+#!/bin/sh
+set -e
+if [ "$1" = "purge" ]; then
+    # remove
+    exit 0
+fi
+
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "purge" ] ; then
+	update-rc.d mahalia-batcat remove >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "purge" ] ; then
+	update-rc.d mahalia-wifidisable remove >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "purge" ] ; then
+	update-rc.d mahalia-flasher remove >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "purge" ] ; then
+	update-rc.d mahalia-setup remove >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installinit/12ubuntu1
+if [ "$1" = "purge" ] ; then
+	update-rc.d mahalia remove >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installmodules/12ubuntu1
+if [ -e /boot/System.map-4.14.94-rt50-02913-g8383e797681a-dirty ]; then
+	depmod -a -F /boot/System.map-4.14.94-rt50-02913-g8383e797681a-dirty 4.14.94-rt50-02913-g8383e797681a-dirty || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start/12ubuntu1
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'mahalia-batcat.service' >/dev/null || true
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'mahalia-batcat.service' >/dev/null || true
+		deb-systemd-helper unmask 'mahalia-batcat.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'mahalia-flasher.service' >/dev/null || true
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'mahalia-flasher.service' >/dev/null || true
+		deb-systemd-helper unmask 'mahalia-flasher.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'mahalia-setup.service' >/dev/null || true
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'mahalia-setup.service' >/dev/null || true
+		deb-systemd-helper unmask 'mahalia-setup.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12ubuntu1
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'mahalia.service' >/dev/null || true
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'mahalia.service' >/dev/null || true
+		deb-systemd-helper unmask 'mahalia.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+

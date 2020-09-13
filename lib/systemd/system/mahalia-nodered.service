@@ -1,0 +1,18 @@
+# systemd service file to start Node-RED
+[Unit]
+Description=Node-RED graphical event wiring tool.
+Wants=network.target
+Documentation=http://nodered.org/docs/hardware/raspberrypi.html
+[Service]
+Type=simple
+User=root
+Group=root
+Environment="NODE_OPTIONS=--max-old-space-size=128"
+Environment="NODE_RED_OPTIONS=/etc/nodered/openMHAcontrol.flow"
+Environment="NODE_PATH=/usr/local/lib/node_modules"
+ExecStart=/usr/local/bin/node-red $NODE_OPTIONS $NODE_RED_OPTIONS
+KillSignal=SIGINT
+Restart=on-failure
+SyslogIdentifier=Node-RED
+[Install]
+WantedBy=multi-user.target

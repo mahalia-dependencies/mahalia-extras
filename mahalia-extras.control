@@ -1,0 +1,4 @@
+Maintainer: The openMHA Packaging Team <packaging@openmha.org>
+Section: sound
+Description: Mahalia Extras
+ Config files for the Mahalia system
