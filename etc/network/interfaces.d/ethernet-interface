@@ -1,0 +1,5 @@
+# On Beaglebone Black with ethernet jack, connect to network using DHCP
+# The primary network interface
+
+allow-hotplug eth0
+iface eth0 inet dhcp

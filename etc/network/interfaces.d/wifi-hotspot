@@ -1,0 +1,9 @@
+# Mahalia wifi hotspot:
+# On Beaglebone Black wireless, Mahalia provides an open wireless network
+# and allows clients to connect to this network in order to communicate with
+# the Mahalia device.
+
+auto wlan0
+iface wlan0 inet static
+  address 10.0.0.1
+  netmask 255.255.255.0

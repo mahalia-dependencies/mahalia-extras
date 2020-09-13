@@ -1,0 +1,9 @@
+# Mahalia loads kernel module g_ether to enable network connections
+# from a client computer over USB cable.  The mahalia device configures
+# IP address 192.168.7.2 for this virtual network interface, the client
+# computer should configure 192.168.7.1.
+
+auto usb0
+iface usb0 inet static
+  address 192.168.7.2
+  netmask 255.255.255.0

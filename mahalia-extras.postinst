@@ -41,24 +41,6 @@ if [ "$1" = 'configure' ]; then
         # The node-red package installs a "socket" that we need to disable
         rm -f /etc/systemd/system/sockets.target.wants/nodered.socket
 
-# setup wifi hotspot
-echo "
-# wifi hotspot
-auto wlan0
-iface wlan0 inet static
-  address 10.0.0.1
-  netmask 255.255.255.0" >> /etc/network/interfaces
-
-# setup usb <-> ethernet bridge
-echo "g_ether" >> /etc/modules
-echo "
-# usb <-> ethernet bridge
-auto usb0
-iface usb0 inet static
-  address 192.168.7.2
-  netmask 255.255.255.0" >> /etc/network/interfaces
-
-
 	exit 0
 fi
 

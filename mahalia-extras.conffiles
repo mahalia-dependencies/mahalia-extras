@@ -6,3 +6,10 @@
 /etc/mahalia/mha-matrixmixer.cfg
 /etc/mahalia/mha-test.cfg
 /etc/sysctl.d/sysctl.conf
+/etc/network/interfaces.d/ethernet-interface
+/etc/network/interfaces.d/localhost-interface
+/etc/network/interfaces.d/microusb-network
+/etc/network/interfaces.d/wifi-hotspot
+/etc/modules-load.d/mahalia.conf
+/etc/hostname
+/etc/fstab
