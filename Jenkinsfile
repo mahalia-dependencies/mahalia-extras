@@ -20,7 +20,7 @@ pipeline {
                 // Copies the new debs to the stash of existing debs,
                 sh "make SUPPLY_DIR=output/ PROJECT=mahalia-extras"
 
-                build job:         "/hoertech-aptly/master",
+                build job:         "/hoertech-aptly/$BRANCH_NAME",
                       quietPeriod: 300,
                       wait:        false
             }
